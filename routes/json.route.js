@@ -1,16 +1,21 @@
 const {Router} = require('express')
 const router = Router()
-const MoexAPI = require("moex-api");
-const moexApi = new MoexAPI();
+const Payment = require('../models/Payment')
 
 router.post('/add', async (req, res) => {
     try {
         const json = req.body
-        await moexApi.securityMarketData("USD000UTSTOM").then((security) => {
-            console.log(security.node.last); // e.g. 64.04
-            json.forEach(el => el.val = Number(el.val) + Number(security.node.last))
-        });
-        res.json(json)
+        json.CardNumber = Number(json.CardNumber)
+        const payment = await new Payment({
+            json
+        })
+
+        await payment.save()
+        const answer = {
+            RequestId: payment.id,
+            Amount: json.Amount
+        }
+        res.json(answer)
     }
     catch (error) {
         console.log(error)
