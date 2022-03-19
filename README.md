@@ -1,7 +1,7 @@
 # DataSubServer
 
 ## Сначала установить зависимости
-### npm intall
+### npm install
 
 ## Для запуска
 ### node index.js
